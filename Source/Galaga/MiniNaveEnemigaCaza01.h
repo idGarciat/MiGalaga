@@ -17,6 +17,6 @@ class GALAGA_API AMiniNaveEnemigaCaza01 : public ANaveEnemigaCaza
 public:
 	AMiniNaveEnemigaCaza01();
 
-
+	void Mover(float Deltatime) override;
 	
 };

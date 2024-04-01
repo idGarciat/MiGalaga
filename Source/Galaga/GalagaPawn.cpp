@@ -18,6 +18,9 @@
 #include "CapsulaVelocidad.h"
 #include "CapsulaDisparo.h"
 
+#include "RotatingActor.h"
+#include "Components/SphereComponent.h"
+
 
 
 const FName AGalagaPawn::MoveForwardBinding("MoveForward");
@@ -65,6 +68,14 @@ AGalagaPawn::AGalagaPawn()
 
 	a = false;
 	GunOffset2 = FVector(0.f, 100.f, 0.f);
+
+
+	NumeroBalas = 8;
+
+	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
+	SphereComp->AttachToComponent(GetShipMeshComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	SphereComp->SetSphereRadius(200);
+
 }
 
 void AGalagaPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -131,7 +142,31 @@ void AGalagaPawn::FireShot(FVector FireDirection)
 		{
 
 			if (a == true) {
-				MultiShots(FireDirection, 8, 0);
+				
+				//MultiShots(FireDirection, 8, 0);
+
+				for (int i = 0; i < NumeroBalas; i++)
+				{
+
+					int grade = 360 / NumeroBalas;
+
+					UWorld* const World = GetWorld();
+
+					FireDirection = FireDirection.RotateAngleAxis(i * grade, FVector(0, 0, 1));
+					const FRotator FireRotation = FireDirection.Rotation();
+					const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
+
+					if (World != nullptr)
+					{
+						// spawn the projectile
+						World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+					}
+
+					bCanFire = false;
+					World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &AGalagaPawn::ShotTimerExpired, FireRate);
+
+				}
+
 
 			}
 			else {
@@ -155,6 +190,7 @@ void AGalagaPawn::MultiShots(FVector FireDirection, int numbers, int i)
 	if (i >= numbers) {
 		return;
 	}
+
 	UWorld* const World = GetWorld();
 
 	FireDirection = FireDirection.RotateAngleAxis(i * grade, FVector(0, 0, 1));
@@ -248,10 +284,6 @@ void AGalagaPawn::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimiti
 
 }
 
-
-
-
-
 void AGalagaPawn::Disparo()
 {
 	// Create fire direction vector
@@ -267,6 +299,27 @@ void AGalagaPawn::DisparoDireccion()
 	FireShot(FVector(1,0,0));
 	//FireShot(FVector(0, 1, 0));
 
+
+}
+
+void AGalagaPawn::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+
+	if (ARotatingActor* RotatingActorCheck = Cast<ARotatingActor>(OtherActor))
+	{
+		RotatingActorCheck->SetbCanRotate(true);
+	
+	}
+
+}
+
+void AGalagaPawn::NotifyActorEndOverlap(AActor* OtherActor)
+{
+
+	if (ARotatingActor* RotatingActorCheck = Cast<ARotatingActor>(OtherActor))
+	{
+		RotatingActorCheck->SetbCanRotate(false);
+	}
 
 }
 

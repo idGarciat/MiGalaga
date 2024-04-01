@@ -14,7 +14,7 @@ UOrbitingMovementComponent::UOrbitingMovementComponent()
 
 	// ...
 
-	RotationSpeed = 100;
+	RotationSpeed = 500;
 	OrbitDistance = 1;
 	CurrentValue = 0;
 	RotateToFaceOutwards = true;

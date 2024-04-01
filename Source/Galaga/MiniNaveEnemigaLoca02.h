@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "NaveEnemigaLoca.h"
 #include "OrbitingMovementComponent.h"
+
+#include "MiniNaveEnemigaCaza01.h"
+
 #include "MiniNaveEnemigaLoca02.generated.h"
 
 /**
@@ -20,6 +23,23 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	UOrbitingMovementComponent* OrbitingMovement;
+
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* BoxOne;
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* BoxTwo;
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* BoxThree;
+
+
+	AMiniNaveEnemigaCaza01* MiniNaveEnemigaCaza01;
+
+	//Begin Play
+	virtual void BeginPlay() override;
+
+
+	void AdjuntarObjetoAOtro(AActor* ObjetoAAdjuntar, USceneComponent* ComponentePadre);
 
 
 };

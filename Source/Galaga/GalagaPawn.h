@@ -110,5 +110,12 @@ public:
 	void DisparoDireccion();
 
 
+	int NumeroBalas;
+
+
+protected:
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor);
+	virtual void NotifyActorEndOverlap(AActor* OtherActor);
+	class USphereComponent* SphereComp;
 };
 

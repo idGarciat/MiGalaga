@@ -11,3 +11,8 @@ AMiniNaveEnemigaCaza01::AMiniNaveEnemigaCaza01()
 	MeshNave->SetMaterial(0, Material.Object);
 
 }
+
+void AMiniNaveEnemigaCaza01::Mover(float Deltatime)
+{
+
+}
