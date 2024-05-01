@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 
 #include "InventoryComponent.h"
-
+#include "MyPlayerController.h"
 #include "GalagaPawn.generated.h"
 
 
@@ -49,6 +49,7 @@ public:
 
 	// Begin Actor Interface
 	virtual void Tick(float DeltaSeconds) override;
+	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End Actor Interface
 
@@ -64,8 +65,7 @@ public:
 	static const FName FireForwardBinding;
 	static const FName FireRightBinding;
 
-	static const FName DisparoVertical;
-	static const FName DisparoHorizontal;
+
 
 private:
 
@@ -103,12 +103,6 @@ public:
 
 	void MultiShots(FVector FireDirection, int numbers, int i);
 
-	bool a;
-
-	void Disparo();
-
-	void DisparoDireccion();
-
 
 	int NumeroBalas;
 
@@ -116,6 +110,43 @@ public:
 protected:
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor);
 	virtual void NotifyActorEndOverlap(AActor* OtherActor);
-	class USphereComponent* SphereComp;
+	//class USphereComponent* SphereComp;
+
+
+	//Salto
+
+	void Salto();
+
+	bool PuedeSaltar;
+
+	bool EstaSaltando;
+
+	float TiempoTranscurrido;
+
+
+	//Volver al inicio
+
+	FVector PosicionInicial;
+
+	bool PuedeVolver;
+
+	void Volver(float DeltaSeconds);
+
+	void PodraVolver();
+
+
+	//Teletransporte
+
+	void Teletransporte();
+
+
+	bool Multidisparo;
+
+	//APlayerController* mouse;
+
+	AMyPlayerController* MyMouse;
+
+
+
 };
 

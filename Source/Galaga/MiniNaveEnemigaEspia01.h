@@ -16,5 +16,10 @@ class GALAGA_API AMiniNaveEnemigaEspia01 : public ANaveEnemigaEspia
 
 	public:
 		AMiniNaveEnemigaEspia01();
+		virtual void BeginPlay() override;
+		//virtual void Mover(float DeltaTime) override;
+		virtual void Disparar(FVector DireccionDisparo) override;
+		virtual void Disparo();
+
 	
 };

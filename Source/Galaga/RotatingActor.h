@@ -35,6 +35,6 @@ protected:
 	UStaticMeshComponent* MeshComp;
 
 	//Rotation Rate for our Actor.
-	const FQuat ActorRotationRate = (FQuat(FRotator(0, 1, 0)));
+	//const FQuat ActorRotationRate = (FQuat(FRotator(0, 1, 0)));
 
 };

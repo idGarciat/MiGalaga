@@ -18,14 +18,22 @@ class GALAGA_API ANaveEnemiga : public ANave
 public:
 	ANaveEnemiga();
 
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void Mover(float DeltaTime);
-	virtual void Disparar();
+
+	virtual void Disparar(FVector DireccionDisparo);
+	virtual void TiempoDisparoExpirado();
+	virtual void Disparo();
+
+
 	virtual void Morir();
-	virtual void Colisionar();
+
+	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 
+	float NewX;
+	float NewY;
 
 
 

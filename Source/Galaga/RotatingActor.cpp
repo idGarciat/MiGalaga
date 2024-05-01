@@ -13,7 +13,8 @@ ARotatingActor::ARotatingActor()
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetupAttachment(RootComponent, "Root");
-	bCanRotate = false;
+
+	bCanRotate = true;
 
 
 }
@@ -44,7 +45,7 @@ void ARotatingActor::SetbCanRotate(bool value)
 
 void ARotatingActor::RotateActor()
 {
-	AddActorLocalRotation(FRotator(0,1,0));
+	AddActorLocalRotation(FRotator(0,5,0));
 
 }
 

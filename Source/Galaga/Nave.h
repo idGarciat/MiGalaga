@@ -41,6 +41,14 @@ protected:
 	int tiempoDisparo;
 	float TiempoTranscurrido;
 
+	//Disparo
+
+	bool PuedeDisparar;
+	FVector GunOffset;
+	float CadenciaDisparo;
+	FTimerHandle TimerHandle_ShotTimerExpired;
+	FTimerHandle MemberTimerHandle;
+
 public:
 	FORCEINLINE int GetVida() const { return vida; }
 	FORCEINLINE float GetVelocidad() const { return Velocidad; }
@@ -60,9 +68,13 @@ public:
 
 public:
 	virtual void Mover() PURE_VIRTUAL(ANaveEnemiga::Mover);
-	virtual void Disparar() PURE_VIRTUAL(ANaveEnemiga::Disparar);
+	virtual void Disparar(FVector DireccionDisparo) PURE_VIRTUAL(ANaveEnemiga::Disparar);
+	virtual void TiempoDisparoExpirado() PURE_VIRTUAL(ANaveEnemiga::TiempoDisparoExpirado);
+	virtual void Disparo() PURE_VIRTUAL(ANaveEnemiga::Disparo);
+
 	virtual void Morir() PURE_VIRTUAL(ANaveEnemiga::Morir);
-	virtual void Colisionar() PURE_VIRTUAL(ANaveEnemiga::Colisionar);
+
+	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) PURE_VIRTUAL(ANaveEnemiga::NotifyHit);
 
 
 };

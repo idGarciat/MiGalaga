@@ -9,11 +9,17 @@
 #include "MiniNaveEnemigaNodriza01.h"
 #include "MiniNaveEnemigaNodriza02.h"
 #include "GalagaPawn.h"
+#include "MyPlayerController.h"
+#include "Factory_Method/FactoryMethod_Main.h"
+#include "Builder/Builder_Main.h"
 
 AGalagaGameMode::AGalagaGameMode()
 {
 	// set default pawn class to our character class
 	DefaultPawnClass = AGalagaPawn::StaticClass();
+
+	PlayerControllerClass = AMyPlayerController::StaticClass();
+
 }
 
 void AGalagaGameMode::BeginPlay()
@@ -22,11 +28,11 @@ void AGalagaGameMode::BeginPlay()
 	//Set the game state to playing
 	FVector UbicacionNaveEnemiga01 = FVector(0,-400,215);
 	FVector UbicacionMiniNaveEnemigaCaza01 = FVector(100,-400,215);
-	FVector UbicacionMiniNaveEnemigaCaza02 = FVector(200,-400,215);
-	FVector UbicacionMiniNaveEnemigaEspia01 = FVector(300,-400,215);
-	FVector UbicacionMiniNaveEnemigaEspia02 = FVector(400,-400,215);
-	FVector UbicacionMiniNaveEnemigaNodriza01 = FVector(500,-400,215);
-	FVector UbicacionMiniNaveEnemigaNodriza02 = FVector(600,-400,215);
+	FVector UbicacionMiniNaveEnemigaCaza02 = FVector(100,-700,215);
+	FVector UbicacionMiniNaveEnemigaEspia01 = FVector(100,-900,215);
+	FVector UbicacionMiniNaveEnemigaEspia02 = FVector(100,-1100,215);
+	FVector UbicacionMiniNaveEnemigaNodriza01 = FVector(100,-1300,215);
+	FVector UbicacionMiniNaveEnemigaNodriza02 = FVector(100,-1500,215);
 
 
 	//Spawn NaveEnemiga
@@ -59,5 +65,12 @@ void AGalagaGameMode::BeginPlay()
 
 	FVector UbicacionHierarchyActor = FVector(1000, -400, 215);
 	HierarchyActor = GetWorld()->SpawnActor<AHierarchyActor>(UbicacionHierarchyActor, FRotator::ZeroRotator);
+
+	//Spawn FactoryMethod_Main
+	//AFactoryMethod_Main* FactoryMethod_Main = GetWorld()->SpawnActor<AFactoryMethod_Main>(AFactoryMethod_Main::StaticClass());
+
+	//Spawn Builder_Main
+	ABuilder_Main* Builder_Main = GetWorld()->SpawnActor<ABuilder_Main>(ABuilder_Main::StaticClass());
+
 }
 

@@ -21,6 +21,11 @@
 #include "RotatingActor.h"
 #include "Components/SphereComponent.h"
 
+#include "GameFramework/FloatingPawnMovement.h"
+
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+
+
 
 
 const FName AGalagaPawn::MoveForwardBinding("MoveForward");
@@ -28,11 +33,10 @@ const FName AGalagaPawn::MoveRightBinding("MoveRight");
 const FName AGalagaPawn::FireForwardBinding("FireForward");
 const FName AGalagaPawn::FireRightBinding("FireRight");
 
-const FName AGalagaPawn::DisparoVertical("DisparoVertical");
-const FName AGalagaPawn::DisparoHorizontal("DisparoHorizontal");
 
 AGalagaPawn::AGalagaPawn()
 {	
+	PrimaryActorTick.bCanEverTick = true;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/TwinStick/Meshes/TwinStickUFO.TwinStickUFO"));
 	// Create the mesh component
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShipMesh"));
@@ -46,15 +50,15 @@ AGalagaPawn::AGalagaPawn()
 
 	// Create a camera boom...
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
+	//CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when ship does
-	CameraBoom->TargetArmLength = 1200.f;
+	CameraBoom->TargetArmLength = 1800.f;
 	CameraBoom->SetRelativeRotation(FRotator(-80.f, 0.f, 0.f));
 	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 
 	// Create a camera...
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
-	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	//CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
 
 	// Movement
@@ -66,15 +70,27 @@ AGalagaPawn::AGalagaPawn()
 
 	MyInventory = CreateDefaultSubobject<UInventoryComponent>("MyInventory");
 
-	a = false;
+	Multidisparo = false;
 	GunOffset2 = FVector(0.f, 100.f, 0.f);
 
 
 	NumeroBalas = 8;
 
-	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
-	SphereComp->AttachToComponent(GetShipMeshComponent(), FAttachmentTransformRules::KeepRelativeTransform);
-	SphereComp->SetSphereRadius(200);
+	//SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
+	//SphereComp->AttachToComponent(GetShipMeshComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	//SphereComp->SetSphereRadius(200);
+
+	PuedeSaltar = false;
+	EstaSaltando = false;
+	TiempoTranscurrido = 0;
+
+	PuedeVolver = false;
+
+
+	PosicionInicial = FVector(-1150.0,-160, 215);
+
+
+
 
 }
 
@@ -89,7 +105,14 @@ void AGalagaPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(FireRightBinding);
 
 	PlayerInputComponent->BindAction("DropItem", IE_Pressed, this, &AGalagaPawn::DropItem);
-	PlayerInputComponent->BindAction("DisparoDireccion", IE_Pressed, this, &AGalagaPawn::DisparoDireccion);
+
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AGalagaPawn::Salto);
+
+	PlayerInputComponent->BindAction("Comeback", IE_Pressed, this, &AGalagaPawn::PodraVolver);
+
+	PlayerInputComponent->BindAction("Teleportation", IE_Pressed, this, &AGalagaPawn::Teletransporte);
+
+
 
 }
 
@@ -101,6 +124,8 @@ void AGalagaPawn::Tick(float DeltaSeconds)
 
 	// Clamp max size so that (X=1, Y=1) doesn't cause faster movement in diagonal directions
 	MoveDirection = FVector(ForwardValue, RightValue, 0.f).GetClampedToMaxSize(1.0f);
+
+
 
 	// Calculate  movement
 	const FVector Movement = MoveDirection * MoveSpeed * DeltaSeconds;
@@ -128,6 +153,100 @@ void AGalagaPawn::Tick(float DeltaSeconds)
 
 	FireShot(FireDirection);
 
+	//Salto
+	if (PuedeSaltar == true) {
+
+		TiempoTranscurrido += DeltaSeconds;
+
+		SetActorLocation(GetActorLocation() + FVector(0, 0, 100) * DeltaSeconds);
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Primer if")));
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Tiempo Transcurrido %f"), TiempoTranscurrido));
+
+
+		if (TiempoTranscurrido >= 1.f) {
+
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Segundo if")));
+
+			TiempoTranscurrido = 0;
+
+			EstaSaltando = true;
+
+			PuedeSaltar = false;
+
+
+			
+		}
+
+
+	}
+
+
+	if (EstaSaltando == true) {
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Tercer if")));
+
+		SetActorLocation(GetActorLocation() - FVector(0, 0, 100) * DeltaSeconds);
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Tiempo Transcurrido %f"), TiempoTranscurrido));
+
+
+		TiempoTranscurrido += DeltaSeconds;
+
+
+		if (TiempoTranscurrido >= 1.f) {
+
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Cuarto if")));
+
+			EstaSaltando = false;
+
+			TiempoTranscurrido = 0;
+
+		}
+
+	}
+
+
+	//Volver
+	if (PuedeVolver == true)
+	{
+		Volver(DeltaSeconds);
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Puede Volver")));
+
+		if (GetActorLocation().Equals(PosicionInicial, 100.f)) {
+			PuedeVolver = false;
+			
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Ya volvio")));
+
+
+		}
+	}
+
+
+
+
+}
+
+void AGalagaPawn::BeginPlay()
+{
+
+	Super::BeginPlay();
+
+	//mouse = Cast<APlayerController>(GetController());
+
+
+	MyMouse = Cast<AMyPlayerController>(GetController());
+
+
+	//if (mouse)
+	//{
+	//	mouse->bShowMouseCursor = true;
+	//	mouse->bEnableClickEvents = true;
+	//	mouse->bEnableMouseOverEvents = true;
+	//}
+
 }
 
 void AGalagaPawn::FireShot(FVector FireDirection)
@@ -141,7 +260,7 @@ void AGalagaPawn::FireShot(FVector FireDirection)
 		if (FireDirection.SizeSquared() > 0.0f)
 		{
 
-			if (a == true) {
+			if (Multidisparo == true) {
 				
 				//MultiShots(FireDirection, 8, 0);
 
@@ -183,6 +302,7 @@ void AGalagaPawn::FireShot(FVector FireDirection)
 		}
 	}
 }
+
 void AGalagaPawn::MultiShots(FVector FireDirection, int numbers, int i)
 {
 	int grade = 360/ numbers;
@@ -220,6 +340,7 @@ void AGalagaPawn::DropItem()
 {
 	if (MyInventory->CurrentInventory.Num() == 0)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("No hay items en el inventario")));
 		return;
 	}
 	AInventoryActor* Item =
@@ -229,8 +350,8 @@ void AGalagaPawn::DropItem()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Es la capsula disparo")));
 		//FireRate = 0.1;
-		a = true;
-		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, FString::Printf(TEXT("a es : %b"), a));
+		Multidisparo = true;
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, FString::Printf(TEXT("Multidisparo es : %b"), Multidisparo));
 	}
 
 
@@ -260,7 +381,6 @@ void AGalagaPawn::TakeItem(AInventoryActor* InventoryItem)
 	MyInventory->AddToInventory(InventoryItem);
 }
 
-
 void AGalagaPawn::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 	AInventoryActor* InventoryItem = Cast<AInventoryActor>(Other);
@@ -284,24 +404,6 @@ void AGalagaPawn::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimiti
 
 }
 
-void AGalagaPawn::Disparo()
-{
-	// Create fire direction vector
-	const float ValorDisparoVertical = GetInputAxisValue(DisparoVertical);
-	const float ValorDisparoHorizontal = GetInputAxisValue(DisparoVertical);
-	const FVector DireccionDisparo = FVector(ValorDisparoVertical, ValorDisparoHorizontal, 0.f);
-}
-
-void AGalagaPawn::DisparoDireccion()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("DisparoDireccion")));
-
-	FireShot(FVector(1,0,0));
-	//FireShot(FVector(0, 1, 0));
-
-
-}
-
 void AGalagaPawn::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 
@@ -320,6 +422,50 @@ void AGalagaPawn::NotifyActorEndOverlap(AActor* OtherActor)
 	{
 		RotatingActorCheck->SetbCanRotate(false);
 	}
+
+}
+
+void AGalagaPawn::Salto()
+{
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Salto")));
+	
+	PuedeSaltar = true;
+
+}
+
+void AGalagaPawn::Volver(float DeltaSeconds)
+{
+
+	SetActorLocation(FMath::VInterpTo(GetActorLocation(), PosicionInicial, DeltaSeconds, 5));
+
+
+}
+
+void AGalagaPawn::PodraVolver()
+{
+
+		PuedeVolver = true;
+
+}
+
+void AGalagaPawn::Teletransporte()
+{
+
+	//Transporte
+
+	//Get where the cursor is pointing(only on the ground, channel1)
+	FHitResult hit(ForceInit);
+
+	//MyMouse->GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel1, false, hit);
+
+	MyMouse->GetHitResultUnderCursor(ECollisionChannel::ECC_WorldDynamic, false, hit);		//Hits any object
+	
+	FVector v = hit.Location;
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Posicion Mouse: %s"), *v.ToString()));
+
+	SetActorLocation(FVector(v.X, v.Y, GetActorLocation().Z));
 
 }
 
