@@ -14,7 +14,7 @@ ARotatingActor::ARotatingActor()
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetupAttachment(RootComponent, "Root");
 
-	bCanRotate = true;
+	bCanRotate = false;
 
 
 }
@@ -30,6 +30,7 @@ void ARotatingActor::BeginPlay()
 void ARotatingActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	if (bCanRotate)
 	{
 		RotateActor();

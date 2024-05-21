@@ -33,13 +33,15 @@ void ABuilder_Main::BeginPlay()
 	BioIngeniero->CrearHeroe(FVector(0, 0, 400), FRotator(0, 0, 0));
 
 
-	BioIngeniero->SetCreador(HeroeFuturista);
+	//BioIngeniero->SetCreador(HeroeFuturista);
 
-	BioIngeniero->CrearHeroe(FVector(500, 0, 400), FRotator(0, 0, 0));
+	//BioIngeniero->CrearHeroe(FVector(500, 0, 400), FRotator(0, 0, 0));
 
-	BioIngeniero->SetCreador(HeroeInfectado);
+	//BioIngeniero->SetCreador(HeroeInfectado);
 
-	BioIngeniero->CrearHeroe(FVector(1000, 0, 400), FRotator(0, 0, 0));
+	//BioIngeniero->CrearHeroe(FVector(1000, 0, 400), FRotator(0, 0, 0));
+
+	//BioIngeniero->CrearHeroe(FVector(1500, 0, 400), FRotator(0, 0, 0));
 
 
 	//AHeroe* Heroe = BioIngeniero->GetHero();

@@ -2,6 +2,8 @@
 
 
 #include "MiniNaveEnemigaLoca02.h"
+#include "Engine/EngineTypes.h"
+
 
 AMiniNaveEnemigaLoca02::AMiniNaveEnemigaLoca02()
 {
@@ -16,7 +18,7 @@ AMiniNaveEnemigaLoca02::AMiniNaveEnemigaLoca02()
 	BoxTwo = CreateDefaultSubobject<UStaticMeshComponent>("BoxTwo");
 	BoxThree = CreateDefaultSubobject<UStaticMeshComponent>("BoxThree");
 
-	MiniNaveEnemigaCaza01 = CreateDefaultSubobject<AMiniNaveEnemigaCaza01>("MiniNaveEnemigaCaza01");
+	//MiniNaveEnemigaCaza01 = CreateDefaultSubobject<AMiniNaveEnemigaCaza01>("MiniNaveEnemigaCaza01");
 
 	auto MeshAsset = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube.1M_Cube'"));
 	auto MeshAssetHierarchy2 = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Wedge_B.Shape_Wedge_B'"));
@@ -37,7 +39,6 @@ AMiniNaveEnemigaLoca02::AMiniNaveEnemigaLoca02()
 	BoxOne->AttachTo(OrbitingMovement);
 	BoxTwo->AttachTo(OrbitingMovement);
 	BoxThree->AttachTo(OrbitingMovement);
-
 	//MiniNaveEnemigaCaza01->AttachToComponent(OrbitingMovement, FAttachmentTransformRules::KeepRelativeTransform);
 
 
@@ -62,6 +63,14 @@ void AMiniNaveEnemigaLoca02::BeginPlay()
 	MiniNaveEnemigaCaza01 = GetWorld()->SpawnActor<AMiniNaveEnemigaCaza01>(GetActorLocation() + FVector(0, -150, 0), FRotator::ZeroRotator);
 
 	AdjuntarObjetoAOtro(MiniNaveEnemigaCaza01, OrbitingMovement);
+
+	MiniNaveEnemigaCaza01->SetOwner(this);
+
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true);
+
+	//MiniNaveEnemigaCaza01->AttachToActor(this, AttachmentRules);
+				
+
 }
 
 // En el método donde deseas realizar la conexión
@@ -69,8 +78,27 @@ void AMiniNaveEnemigaLoca02::AdjuntarObjetoAOtro(AActor* ObjetoAAdjuntar, UScene
 {
 	if (ObjetoAAdjuntar && ComponentePadre)
 	{
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true);
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Adjuntando objeto a otro"));
 		// Llama a AttachToComponent para adjuntar el objeto al componente padre.
-		ObjetoAAdjuntar->AttachToComponent(ComponentePadre, FAttachmentTransformRules::KeepWorldTransform);
+		ObjetoAAdjuntar->AttachToComponent(ComponentePadre, AttachmentRules);
 	}
+
 }
+
+//void AMiniNaveEnemigaLoca02::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//	//if(MiniNaveEnemigaCaza01->GetOwner() == this){
+//	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("El owner de la MiniNaveEnemigaCaza01 es el mismo que el de la MiniNaveEnemigaLoca02"));
+//	//}
+//	//else {
+//	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("El owner de la MiniNaveEnemigaCaza01 no es el mismo que el de la MiniNaveEnemigaLoca02"));
+//	//}
+//
+//}
+
+
+
+

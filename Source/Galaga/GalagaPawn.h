@@ -7,6 +7,7 @@
 
 #include "InventoryComponent.h"
 #include "MyPlayerController.h"
+#include "ActorSpawnerComponent.h"
 #include "GalagaPawn.generated.h"
 
 
@@ -146,7 +147,7 @@ protected:
 
 	AMyPlayerController* MyMouse;
 
-
+	UActorSpawnerComponent* SpawnerComponent;
 
 };
 

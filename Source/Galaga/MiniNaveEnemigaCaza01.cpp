@@ -10,9 +10,20 @@ AMiniNaveEnemigaCaza01::AMiniNaveEnemigaCaza01()
 	
 	MeshNave->SetMaterial(0, Material.Object);
 
+	//RootComponent = MeshNave;
+
 }
 
 void AMiniNaveEnemigaCaza01::Mover(float Deltatime)
 {
+
+
+}
+
+void AMiniNaveEnemigaCaza01::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+
 
 }

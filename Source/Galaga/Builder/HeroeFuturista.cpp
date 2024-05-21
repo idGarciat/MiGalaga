@@ -29,7 +29,10 @@ void AHeroeFuturista::Tick(float DeltaTime)
 void AHeroeFuturista::BuildHero(FVector StartLocation, FRotator StartRotation)
 {
 	Hero = GetWorld()->SpawnActor<AHeroe>(AHeroe::StaticClass(), StartLocation, StartRotation);
+
 	Hero->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+
+
 }
 
 void AHeroeFuturista::BuildMesh()

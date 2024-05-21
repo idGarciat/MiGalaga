@@ -11,6 +11,8 @@
 #include "GalagaPawn.h"
 #include "MyPlayerController.h"
 #include "Factory_Method/FactoryMethod_Main.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+
 #include "Builder/Builder_Main.h"
 
 AGalagaGameMode::AGalagaGameMode()
@@ -25,7 +27,17 @@ AGalagaGameMode::AGalagaGameMode()
 void AGalagaGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	//Set the game state to playing
+
+	//Spawn Jugadores
+
+	//Cast<APlayerController>(UGameplayStatics::CreatePlayer(GetWorld(), 1));
+
+
+	//class AGalagaPawn* Jugador2EnMundo = GetWorld()->SpawnActor<AGalagaPawn>(AGalagaPawn::StaticClass(), FVector(-1050,10,215), FRotator::ZeroRotator);
+	//Jugador2EnMundo->AutoPossessPlayer = EAutoReceiveInput::Player1;
+
+
+
 	FVector UbicacionNaveEnemiga01 = FVector(0,-400,215);
 	FVector UbicacionMiniNaveEnemigaCaza01 = FVector(100,-400,215);
 	FVector UbicacionMiniNaveEnemigaCaza02 = FVector(100,-700,215);
@@ -70,7 +82,7 @@ void AGalagaGameMode::BeginPlay()
 	//AFactoryMethod_Main* FactoryMethod_Main = GetWorld()->SpawnActor<AFactoryMethod_Main>(AFactoryMethod_Main::StaticClass());
 
 	//Spawn Builder_Main
-	ABuilder_Main* Builder_Main = GetWorld()->SpawnActor<ABuilder_Main>(ABuilder_Main::StaticClass());
+	//ABuilder_Main* Builder_Main = GetWorld()->SpawnActor<ABuilder_Main>(ABuilder_Main::StaticClass());
 
 }
 

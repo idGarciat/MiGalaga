@@ -48,15 +48,19 @@ void AMiniNaveEnemigaEspia01::Disparo()
 	if (PuedeDisparar)
 	{
 		AGalagaPawn* avatar = Cast<AGalagaPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		
 		if (!avatar)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("No se encontro el avatar"));
 			return;
 
 		}
 
 		FVector toPlayer = avatar->GetActorLocation() - GetActorLocation();
 		FVector DireccionDisparo = FVector(0.0f, -1.0f, 0.0f);
-		Disparar(DireccionDisparo);
+
+		Disparar(toPlayer);
+
 	}
 
 

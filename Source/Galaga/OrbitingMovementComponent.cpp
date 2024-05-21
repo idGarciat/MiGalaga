@@ -11,7 +11,7 @@ UOrbitingMovementComponent::UOrbitingMovementComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
+	
 	// ...
 
 	RotationSpeed = 500;
@@ -56,6 +56,5 @@ void UOrbitingMovementComponent::TickComponent(float DeltaTime, ELevelTick TickT
 		SetRelativeRotation(LookAtRot);
 	}
 	CurrentValue = FMath::Fmod(CurrentValue + (RotationSpeed *DeltaTime), 360);
-
 }
 

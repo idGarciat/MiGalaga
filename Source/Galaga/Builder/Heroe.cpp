@@ -12,7 +12,6 @@ AHeroe::AHeroe()
 	PrimaryActorTick.bCanEverTick = true;
 
 	MeshHero = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShipMesh"));
-	RootComponent = MeshHero;
 	MeshHero->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 
 }

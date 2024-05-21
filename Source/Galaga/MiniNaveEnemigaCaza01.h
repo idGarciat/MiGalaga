@@ -18,5 +18,7 @@ public:
 	AMiniNaveEnemigaCaza01();
 
 	void Mover(float Deltatime) override;
+
+	virtual void Tick(float DeltaTime) override;
 	
 };

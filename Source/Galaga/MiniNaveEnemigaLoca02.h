@@ -33,6 +33,8 @@ public:
 	UStaticMeshComponent* BoxThree;
 
 
+
+	UPROPERTY(VisibleAnywhere)
 	AMiniNaveEnemigaCaza01* MiniNaveEnemigaCaza01;
 
 	//Begin Play
@@ -40,6 +42,9 @@ public:
 
 
 	void AdjuntarObjetoAOtro(AActor* ObjetoAAdjuntar, USceneComponent* ComponentePadre);
+
+	//virtual void Tick(float DeltaTime) override;
+
 
 
 };

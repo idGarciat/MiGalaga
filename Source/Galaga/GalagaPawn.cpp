@@ -43,6 +43,8 @@ AGalagaPawn::AGalagaPawn()
 	RootComponent = ShipMeshComponent;
 	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	ShipMeshComponent->SetStaticMesh(ShipMesh.Object);
+
+	ShipMeshComponent->bOnlyOwnerSee = false;
 	
 	// Cache our sound effect
 	static ConstructorHelpers::FObjectFinder<USoundBase> FireAudio(TEXT("/Game/TwinStick/Audio/TwinStickFire.TwinStickFire"));
@@ -50,7 +52,7 @@ AGalagaPawn::AGalagaPawn()
 
 	// Create a camera boom...
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	//CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when ship does
 	CameraBoom->TargetArmLength = 1800.f;
 	CameraBoom->SetRelativeRotation(FRotator(-80.f, 0.f, 0.f));
@@ -58,7 +60,7 @@ AGalagaPawn::AGalagaPawn()
 
 	// Create a camera...
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
-	//CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
 
 	// Movement
@@ -89,8 +91,12 @@ AGalagaPawn::AGalagaPawn()
 
 	PosicionInicial = FVector(-1150.0,-160, 215);
 
+	SpawnerComponent = CreateDefaultSubobject<UActorSpawnerComponent>(TEXT("SpawnerComponent"));
+
+	SpawnerComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 
+	
 
 }
 
@@ -247,6 +253,9 @@ void AGalagaPawn::BeginPlay()
 	//	mouse->bEnableMouseOverEvents = true;
 	//}
 
+
+
+
 }
 
 void AGalagaPawn::FireShot(FVector FireDirection)
@@ -400,6 +409,8 @@ void AGalagaPawn::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimiti
 
 	//	MoveSpeed = MoveSpeed * 2;
 	//}
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Recibi un toque, soy el jugador %s"), *GetName()));
 
 
 }
