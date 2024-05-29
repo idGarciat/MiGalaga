@@ -19,25 +19,28 @@ AMiniNaveEnemigaEspia01::AMiniNaveEnemigaEspia01()
 
 void AMiniNaveEnemigaEspia01::BeginPlay()
 {
-		Super::BeginPlay();
+	Super::BeginPlay();
 
-		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AMiniNaveEnemigaEspia01::Disparo, 01.0f, true, 0.0f);
+	//GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AMiniNaveEnemigaEspia01::Disparo, 01.0f, true, 0.0f);
 }
 
 void AMiniNaveEnemigaEspia01::Disparar(FVector DireccionDisparo)
 {
 	if (PuedeDisparar)
 	{
-		FVector PosicionDisparo = GetActorLocation() + DireccionDisparo * 100.0f;
+		FVector PosicionDisparo = GetActorLocation() + 10;
 		FRotator RotacionDisparo = DireccionDisparo.Rotation();
 		UWorld* const World = GetWorld();
 		if (World != NULL)
 		{
 			AGalagaProjectile* Proyectil = World->SpawnActor<AGalagaProjectile>(PosicionDisparo, RotacionDisparo);
-			if (Proyectil)
-			{
-				Proyectil->SetOwner(this);
-			}
+			
+			Proyectil->SetOwner(this);
+
+			//Ubicacion de la bala
+			UE_LOG(LogTemp, Warning, TEXT("Posicion de la bala: %s"), *PosicionDisparo.ToString());
+
+		
 		}
 	}
 
@@ -55,8 +58,10 @@ void AMiniNaveEnemigaEspia01::Disparo()
 			return;
 
 		}
-
+		
 		FVector toPlayer = avatar->GetActorLocation() - GetActorLocation();
+		//Ubicacion del jugador
+		UE_LOG(LogTemp, Warning, TEXT("Posicion del jugador: %s"), *toPlayer.ToString());
 		FVector DireccionDisparo = FVector(0.0f, -1.0f, 0.0f);
 
 		Disparar(toPlayer);

@@ -24,10 +24,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual float Recibirdano() override { return 5; };
+	virtual float Recibirdano() override { return 10; };
 	virtual void Tanier() override {};
 	virtual void Pelear() override {};
 	virtual void Afinar() override {};
 	virtual void SetMesh() override {};
+
+	virtual TArray<AActor*> GetActorsInSphere() override { return TArray<AActor*>(); };
+
+
+	UStaticMeshComponent* MeshCoco;
+
 
 };

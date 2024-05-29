@@ -28,5 +28,6 @@ public:
 	virtual void Pelear() = 0;
 	virtual void Afinar() = 0;
 	virtual void SetMesh() = 0;
+	virtual TArray<AActor*> GetActorsInSphere() = 0;
 
 };

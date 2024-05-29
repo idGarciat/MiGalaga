@@ -15,10 +15,13 @@ class GALAGA_API ACocoBaterista : public ACocoJambo
 	GENERATED_BODY()
 	
 public:
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 	virtual float Recibirdano() override;
 	virtual void Tanier() override;
 	virtual void Pelear() override;
 	virtual void Afinar() override;
 	virtual void SetMesh() override;
+	virtual TArray<AActor*> GetActorsInSphere() override;
 
 };

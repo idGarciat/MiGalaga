@@ -287,7 +287,11 @@ void AGalagaPawn::FireShot(FVector FireDirection)
 					if (World != nullptr)
 					{
 						// spawn the projectile
-						World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+						//World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+
+						AGalagaProjectile* Projectile = World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+						Projectile->SetOwner(this);
+
 					}
 
 					bCanFire = false;
@@ -329,7 +333,9 @@ void AGalagaPawn::MultiShots(FVector FireDirection, int numbers, int i)
 	if (World != nullptr)
 	{
 			// spawn the projectile
-			World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+			//World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+			AGalagaProjectile* Projectile = World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+			Projectile->SetOwner(this);
 	}
 
 	bCanFire = false;

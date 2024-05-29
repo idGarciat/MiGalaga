@@ -10,10 +10,11 @@
 #include "MiniNaveEnemigaNodriza02.h"
 #include "GalagaPawn.h"
 #include "MyPlayerController.h"
-#include "Factory_Method/FactoryMethod_Main.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
+#include "Factory_Method/FactoryMethod_Main.h"
 #include "Builder/Builder_Main.h"
+#include "Decorator/Decorator_Main.h"
 
 AGalagaGameMode::AGalagaGameMode()
 {
@@ -83,6 +84,9 @@ void AGalagaGameMode::BeginPlay()
 
 	//Spawn Builder_Main
 	//ABuilder_Main* Builder_Main = GetWorld()->SpawnActor<ABuilder_Main>(ABuilder_Main::StaticClass());
+
+	//Spawn Decorator_Main
+	//ADecorator_Main* Decorator_Main = GetWorld()->SpawnActor<ADecorator_Main>(ADecorator_Main::StaticClass());
 
 }
 

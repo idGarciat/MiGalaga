@@ -10,6 +10,23 @@ ACocoJambo::ACocoJambo()
 	PrimaryActorTick.bCanEverTick = true;
 
 	MeshCoco = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshCoco"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/MeshCustom/fuwa-fuwa-hololive-suisei-release-10/source/FuwaFuwaHololiveSuisei_Release_V1_FuwaSuisei.FuwaFuwaHololiveSuisei_Release_V1_FuwaSuisei'"));
+
+	//MeshCoco->SetStaticMesh(MeshAsset.Object);
+
+	//SkeletalCoco = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalCoco"));
+
+	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> SkeletalMeshAsset(TEXT("StaticMesh'/Game/MeshCustom/fuwa-fuwa-hololive-suisei-release-10/source/FuwaFuwaHololiveSuisei_Release_V1_FuwaSuisei.FuwaFuwaHololiveSuisei_Release_V1_FuwaSuisei'"));
+
+
+	//SkeletalCoco->SetSkeletalMesh(SkeletalMeshAsset.Object);
+
+	MeshCoco->SetStaticMesh(MeshAsset.Object);
+	MeshCoco->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
+	MeshCoco->SetRelativeRotation(FRotator(0.0f, 90.0f, -120.0f));
+
+
+	//SkeletalCoco->AttachToComponent(MeshCoco, FAttachmentTransformRules::KeepRelativeTransform);
 	RootComponent = MeshCoco;
 
 
@@ -26,6 +43,21 @@ void ACocoJambo::BeginPlay()
 void ACocoJambo::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
+ //   tiempotranscurrido += DeltaTime;
+
+ //   if (tiempotranscurrido >= 5.0f)
+ //   {
+ //       GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("5 segundos han pasado"));
+ //       UE_LOG(LogTemp, Warning, TEXT("5 segundos han pasado"));
+
+ //       GetActorsInSphere();
+
+ //       tiempotranscurrido = 0.0f;
+
+	//}
+
 
 }
 
@@ -52,5 +84,12 @@ void ACocoJambo::Afinar()
 void ACocoJambo::SetMesh()
 {
 	this->Musicos->SetMesh();
+}
+
+
+TArray<AActor*> ACocoJambo::GetActorsInSphere()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("GetActorsInSphere from CocoJambo"));
+	return OverlappingActors;
 }
 

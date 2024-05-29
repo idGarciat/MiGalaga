@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Musicos.h"
+#include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+
 #include "CocoJambo.generated.h"
 
 UCLASS()
@@ -31,6 +34,7 @@ private:
 public:
 
 	UStaticMeshComponent* MeshCoco;
+	USkeletalMeshComponent* SkeletalCoco;
 
 public:
 	virtual float Recibirdano() override;
@@ -50,6 +54,10 @@ public:
 	}
 
 
+	virtual TArray<AActor*> GetActorsInSphere() override;
+	float Radius;
+	FVector Center;
+	TArray<AActor*> OverlappingActors;
 
-
+	float tiempotranscurrido;
 };

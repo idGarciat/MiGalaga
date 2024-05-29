@@ -30,6 +30,21 @@ ANaveEnemiga::ANaveEnemiga()
 	Velocidad = 100;
 	CadenciaDisparo = 2.0f;
 	PuedeDisparar = false;
+
+
+}
+
+void ANaveEnemiga::BeginPlay()
+{
+	Super::BeginPlay();
+
+	FVector PosicionInicial = GetActorLocation();
+
+	UE_LOG(LogTemp, Warning, TEXT("Posicion Inicial de la nave enemiga: %s, con nombre: %s"), *PosicionInicial.ToString(), *GetName());
+
+	FTimerHandle UnusedHandle;
+
+	//GetWorld()->GetTimerManager().SetTimer(UnusedHandle, this, &ANaveEnemiga::Disparo, 1.0f, true, 1.0f);
 }
 
 void ANaveEnemiga::Tick(float DeltaSeconds)
@@ -166,7 +181,12 @@ void ANaveEnemiga::Disparar(FVector DireccionDisparo)
 			if (World != nullptr)
 			{
 
-				World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+				//World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+				//AGalagaProjectile* Proyectil = World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+				//Proyectil->SetOwner(this);
+
+				//Nave que dispara
+				UE_LOG(LogTemp, Warning, TEXT("Nave que dispara: %s"), *GetName());
 			}
 
 			PuedeDisparar = false;
@@ -215,7 +235,7 @@ void ANaveEnemiga::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimit
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Hit")));
 
-		Morir();
+		//Morir();
 	}
 
 }

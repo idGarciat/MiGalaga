@@ -18,9 +18,13 @@ class GALAGA_API ANaveEnemiga : public ANave
 public:
 	ANaveEnemiga();
 
+	virtual void BeginPlay() override;
+
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void Mover(float DeltaTime);
+
+
 
 	virtual void Disparar(FVector DireccionDisparo);
 	virtual void TiempoDisparoExpirado();
