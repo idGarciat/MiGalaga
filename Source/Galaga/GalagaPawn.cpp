@@ -24,6 +24,7 @@
 #include "GameFramework/FloatingPawnMovement.h"
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 
 
@@ -95,7 +96,7 @@ AGalagaPawn::AGalagaPawn()
 
 	SpawnerComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
-
+	Rebote = false;
 	
 
 }
@@ -290,7 +291,16 @@ void AGalagaPawn::FireShot(FVector FireDirection)
 						//World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
 
 						AGalagaProjectile* Projectile = World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+						if (Rebote) 
+						{
+
+							GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Rebote es true")));
+							Projectile->ProjectileMovement->bShouldBounce = true;
+							Projectile->ProjectileMovement->Bounciness = 1;
+						
+						}
 						Projectile->SetOwner(this);
+
 
 					}
 
@@ -335,7 +345,20 @@ void AGalagaPawn::MultiShots(FVector FireDirection, int numbers, int i)
 			// spawn the projectile
 			//World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
 			AGalagaProjectile* Projectile = World->SpawnActor<AGalagaProjectile>(SpawnLocation, FireRotation);
+			if (Rebote == true)
+			{
+
+				GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Rebote es true")));
+				Projectile->ProjectileMovement->bShouldBounce = true;
+				Projectile->ProjectileMovement->Bounciness = 1;
+				FTimerHandle Restart;
+				
+				World->GetTimerManager().SetTimer(Restart, this, &AGalagaPawn::ReboteProyectil, 10,false);
+		
+			}
+
 			Projectile->SetOwner(this);
+
 	}
 
 	bCanFire = false;
@@ -404,7 +427,7 @@ void AGalagaPawn::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimiti
 
 	if (InventoryItem != nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Es el Inventory Item")));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Es el Inventory Item")));
 
 		TakeItem(InventoryItem);
 	}
@@ -484,5 +507,10 @@ void AGalagaPawn::Teletransporte()
 
 	SetActorLocation(FVector(v.X, v.Y, GetActorLocation().Z));
 
+}
+
+void AGalagaPawn::ReboteProyectil()
+{
+	Rebote = false;
 }
 

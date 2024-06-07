@@ -107,6 +107,8 @@ public:
 
 	int NumeroBalas;
 
+	void SetRebote(bool rebote_) { Rebote = rebote_; };
+
 
 protected:
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor);
@@ -149,5 +151,8 @@ protected:
 
 	UActorSpawnerComponent* SpawnerComponent;
 
+	bool Rebote;
+
+	void ReboteProyectil();
 };
 

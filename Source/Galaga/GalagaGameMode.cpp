@@ -15,6 +15,7 @@
 #include "Factory_Method/FactoryMethod_Main.h"
 #include "Builder/Builder_Main.h"
 #include "Decorator/Decorator_Main.h"
+#include "MapSceneCapture2D.h"
 
 AGalagaGameMode::AGalagaGameMode()
 {
@@ -78,6 +79,9 @@ void AGalagaGameMode::BeginPlay()
 
 	FVector UbicacionHierarchyActor = FVector(1000, -400, 215);
 	HierarchyActor = GetWorld()->SpawnActor<AHierarchyActor>(UbicacionHierarchyActor, FRotator::ZeroRotator);
+
+	AMapSceneCapture2D* MapSceneCapture2D = GetWorld()->SpawnActor<AMapSceneCapture2D>(AMapSceneCapture2D::StaticClass());
+
 
 	//Spawn FactoryMethod_Main
 	//AFactoryMethod_Main* FactoryMethod_Main = GetWorld()->SpawnActor<AFactoryMethod_Main>(AFactoryMethod_Main::StaticClass());

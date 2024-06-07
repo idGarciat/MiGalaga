@@ -4,7 +4,6 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
-#include "GameFramework/ProjectileMovementComponent.h"
 #include "Engine/StaticMesh.h"
 
 AGalagaProjectile::AGalagaProjectile() 
@@ -23,15 +22,14 @@ AGalagaProjectile::AGalagaProjectile()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement0"));
 	ProjectileMovement->UpdatedComponent = ProjectileMesh;
-	ProjectileMovement->InitialSpeed = 500.f;
-	ProjectileMovement->MaxSpeed = 1000.f;
+	ProjectileMovement->InitialSpeed = 3000.f;
+	ProjectileMovement->MaxSpeed = 3000.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = false;
 	ProjectileMovement->ProjectileGravityScale = 0.f; // No gravity
 
 	// Die after 3 seconds by default
 	InitialLifeSpan = 5.0f;
-
 
 }
 
@@ -42,8 +40,18 @@ void AGalagaProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
 	}
-	if (OtherActor != GetOwner()) {
-		//OtherActor->Destroy();
-		//Destroy();
-	}
+	//if (OtherActor != GetOwner()) {
+
+		if (ProjectileMovement->bShouldBounce == true) {
+
+		}
+		else
+		{
+			//OtherActor->Destroy();
+			//Destroy();
+		}
+
+	//}
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Recibi un toque, soy el jugador %s"), *GetName()));
+
 }
