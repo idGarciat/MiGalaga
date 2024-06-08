@@ -52,6 +52,6 @@ void AGalagaProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		}
 
 	//}
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Recibi un toque, soy el jugador %s"), *GetName()));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Recibi un toque, soy el Actor %s"), *GetName()));
 
 }

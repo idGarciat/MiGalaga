@@ -12,6 +12,11 @@
 #include "MyPlayerController.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
+#include "UObject/ConstructorHelpers.h"
+#include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
+
 #include "Factory_Method/FactoryMethod_Main.h"
 #include "Builder/Builder_Main.h"
 #include "Decorator/Decorator_Main.h"
@@ -20,24 +25,111 @@
 AGalagaGameMode::AGalagaGameMode()
 {
 	// set default pawn class to our character class
-	DefaultPawnClass = AGalagaPawn::StaticClass();
 
 	PlayerControllerClass = AMyPlayerController::StaticClass();
+
+	DefaultPawnClass = AGalagaPawn::StaticClass();
+
+
+
+	//static ConstructorHelpers::FClassFinder<APawn>FirstPlayerPawnBPClass(TEXT("Class'/Script/Galaga.GalagaPawn'"));
+	//if (FirstPlayerPawnBPClass.Class != nullptr)
+	//{
+	//	FirstPlayerPawnClass = AGalagaPawn::StaticClass();
+	//	FirstPlayerControllerClass = AMyPlayerController::StaticClass();
+	//}
+
+	//// Establecer la clase del pawn para el segundo jugador
+	//static ConstructorHelpers::FClassFinder<APawn> SecondPlayerPawnBPClass(TEXT("Class'/Script/Galaga.GalagaPawn'"));
+	//if (SecondPlayerPawnBPClass.Class != nullptr)
+	//{
+	//	SecondPlayerPawnClass = AGalagaPawn::StaticClass();
+	//	SecondPlayerControllerClass = AMyPlayerController::StaticClass();
+	//}
 
 }
 
 void AGalagaGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+	//Forma de spawn de jugador
+	{
 
-	//Spawn Jugadores
+	////Spawn Jugadores
+	//APlayerController* PlayerController2 = UGameplayStatics::GetPlayerController(GetWorld(), 1);
+	//if (!PlayerController2)
+	//{
+	//	PlayerController2 = UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+	//}
 
-	//Cast<APlayerController>(UGameplayStatics::CreatePlayer(GetWorld(), 1));
+	//// Spawnear el segundo pawn y poseerlo con el segundo PlayerController
+	//if (PlayerController2)
+	//{
+	//	// Definir la ubicación y rotación para el segundo pawn
+	//	FVector SpawnLocation = FVector(500, 500, 300); // Ubicación de ejemplo
+	//	FRotator SpawnRotation = FRotator::ZeroRotator;
+
+	//	//Spawnear el pawn
+	//	AGalagaPawn* SecondPawn = GetWorld()->SpawnActor<AGalagaPawn>(PawnClass, SpawnLocation, SpawnRotation);
+	//	if (SecondPawn)
+	//	{
+	//		PlayerController2->Possess(SecondPawn);
+	//	}
+	//}
+	}
+	
+
+	//Problema con el controlador de jugador
+	{
+
+		//Crear el primer jugador (por defecto)
+		//APlayerController* PlayerController1 = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		//if (!PlayerController1)
+		//{
+		//		PlayerController1 = UGameplayStatics::CreatePlayer(GetWorld(), 0, true);
+
+		//}
+
+		////// Crear el segundo jugador
+		////APlayerController* PlayerController2 = UGameplayStatics::GetPlayerController(GetWorld(), 1);
+		////if (!PlayerController2)
+		////{
+		////	PlayerController2 = UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+		////}
+
+		//Spawnear el primer pawn
+		//if (PlayerController1 && FirstPlayerPawnClass)
+		//{
+		//	FVector SpawnLocation1 = FVector(-1200, -200, 215); // Ubicación de ejemplo para el primer pawn
+		//	FRotator SpawnRotation1 = FRotator::ZeroRotator;
+
+		//	AGalagaPawn* FirstPawn = GetWorld()->SpawnActor<AGalagaPawn>(FirstPlayerPawnClass, SpawnLocation1, SpawnRotation1);
+
+			//if (FirstPawn)
+			//{
+			//	PlayerController1->Possess(FirstPawn);
+			//	PlayerController1->SetInputMode(FInputModeGameAndUI());
+
+			//}
+		//}
+
+		//// Spawnear el segundo pawn
+		//if (PlayerController2 && SecondPlayerPawnClass)
+		//{
+		//	FVector SpawnLocation2 = FVector(-1200, 0, 215); // Ubicación de ejemplo para el segundo pawn
+		//	FRotator SpawnRotation2 = FRotator::ZeroRotator;
+
+		//	AGalagaPawn* SecondPawn = GetWorld()->SpawnActor<AGalagaPawn>(SecondPlayerPawnClass, SpawnLocation2, SpawnRotation2);
+		//	if (SecondPawn)
+		//	{
+		//		PlayerController2->Possess(SecondPawn);
+		//		PlayerController2->SetInputMode(FInputModeGameAndUI());
+		//		PlayerController1->bShowMouseCursor = true;
 
 
-	//class AGalagaPawn* Jugador2EnMundo = GetWorld()->SpawnActor<AGalagaPawn>(AGalagaPawn::StaticClass(), FVector(-1050,10,215), FRotator::ZeroRotator);
-	//Jugador2EnMundo->AutoPossessPlayer = EAutoReceiveInput::Player1;
-
+		//	}
+		//}
+	}
 
 
 	FVector UbicacionNaveEnemiga01 = FVector(0,-400,215);
@@ -91,6 +183,29 @@ void AGalagaGameMode::BeginPlay()
 
 	//Spawn Decorator_Main
 	//ADecorator_Main* Decorator_Main = GetWorld()->SpawnActor<ADecorator_Main>(ADecorator_Main::StaticClass());
+
+
+	//Timer
+	//GetWorldTimerManager().SetTimer(TimerHandle, this, &AGalagaGameMode::Reinicio, 10.0f, false, 10.0f);
+
+}
+
+
+void AGalagaGameMode::Reinicio()
+{
+	//Obtiene el pawn actual
+	AGalagaPawn* JugadorEnMundoP = Cast<AGalagaPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	//JugadorEnMundoP->Destroy();
+
+
+	//AGalagaPawn* JugadorEnMundo = GetWorld()->SpawnActor<AGalagaPawn>(AGalagaPawn::StaticClass(), FVector(-1050,10,215), FRotator::ZeroRotator);
+	//AMyPlayerController* JugadorController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	//
+	//JugadorController->Possess(JugadorEnMundo);
+
+	//JugadorEnMundo->AutoPossessPlayer = EAutoReceiveInput::Player0;
+
+
 
 }
 

@@ -14,6 +14,7 @@
 #include "CapsulaDisparo.h"
 #include "GalagaGameMode.generated.h"
 
+
 class ANaveEnemiga;
 class AMiniNaveEnemigaCaza01;
 class AMiniNaveEnemigaCaza02;
@@ -53,7 +54,23 @@ public:
 	ACapsulaDisparo* CapsulaDisparo;
 
 
+	FTimerHandle TimerHandle;
 
+	void Reinicio();
+
+	
+private:
+	UPROPERTY(EditAnywhere, Category = "Player")
+	TSubclassOf<AGalagaPawn> FirstPlayerPawnClass;
+
+	UPROPERTY(EditAnywhere, Category = "Player")
+	TSubclassOf<AGalagaPawn> SecondPlayerPawnClass;
+
+	UPROPERTY(EditAnywhere, Category = "PlayerController")
+	TSubclassOf<AMyPlayerController> FirstPlayerControllerClass;
+
+	UPROPERTY(EditAnywhere, Category = "PlayerController")
+	TSubclassOf<AMyPlayerController> SecondPlayerControllerClass;
 
 
 };

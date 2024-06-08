@@ -13,5 +13,15 @@ UCLASS()
 class GALAGA_API AMapSceneCapture2D : public ASceneCapture2D
 {
 	GENERATED_BODY()
-	
+
+private:
+
+	AMapSceneCapture2D();
+
+protected:
+
+	virtual void BeginPlay() override;
+
+	void SetOrthoWidth(float NewOrthoWidth);
+
 };

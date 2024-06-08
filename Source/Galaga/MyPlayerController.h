@@ -18,5 +18,13 @@ public:
 
 	AMyPlayerController();
 
-	
+protected:
+
+	virtual void BeginPlay() override;
+
+	// Clase del widget
+	TSubclassOf<class UPlayerIcon> MyPlayerIcon;
+
+	// Instancia del widget
+	UPlayerIcon* MyWidgetInstance;
 };

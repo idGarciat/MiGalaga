@@ -57,6 +57,7 @@ AGalagaPawn::AGalagaPawn()
 	CameraBoom->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when ship does
 	CameraBoom->TargetArmLength = 1800.f;
 	CameraBoom->SetRelativeRotation(FRotator(-80.f, 0.f, 0.f));
+	//CameraBoom->SetRelativeLocation(FVector(-1050.f, 0.f, 0.f));
 	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 
 	// Create a camera...
@@ -269,6 +270,7 @@ void AGalagaPawn::FireShot(FVector FireDirection)
 		// If we are pressing fire stick in a direction
 		if (FireDirection.SizeSquared() > 0.0f)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("Disparando desde el Actor %s"), *GetName()));
 
 			if (Multidisparo == true) {
 				
@@ -299,6 +301,7 @@ void AGalagaPawn::FireShot(FVector FireDirection)
 							Projectile->ProjectileMovement->Bounciness = 1;
 						
 						}
+
 						Projectile->SetOwner(this);
 
 
@@ -439,7 +442,7 @@ void AGalagaPawn::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimiti
 	//	MoveSpeed = MoveSpeed * 2;
 	//}
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Recibi un toque, soy el jugador %s"), *GetName()));
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Recibi un toque, soy el actor %s"), *GetName()));
 
 
 }
@@ -485,7 +488,7 @@ void AGalagaPawn::Volver(float DeltaSeconds)
 void AGalagaPawn::PodraVolver()
 {
 
-		PuedeVolver = true;
+	PuedeVolver = true;
 
 }
 
@@ -498,6 +501,12 @@ void AGalagaPawn::Teletransporte()
 	FHitResult hit(ForceInit);
 
 	//MyMouse->GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel1, false, hit);
+
+	if(!MyMouse)
+{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("No hay mouse")));
+		return;
+	}
 
 	MyMouse->GetHitResultUnderCursor(ECollisionChannel::ECC_WorldDynamic, false, hit);		//Hits any object
 	
