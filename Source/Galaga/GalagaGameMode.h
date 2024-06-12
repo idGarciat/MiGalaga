@@ -12,6 +12,11 @@
 #include "HierarchyActor.h"
 #include "CapsulaVelocidad.h"
 #include "CapsulaDisparo.h"
+
+#include "Command/GameCommand.h"
+
+
+
 #include "GalagaGameMode.generated.h"
 
 
@@ -33,6 +38,8 @@ public:
 	AGalagaGameMode();
 
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
 
 	ANaveEnemiga* NaveEnemiga01;
 	AMiniNaveEnemigaCaza01* MiniNaveEnemigaCaza01;
@@ -72,6 +79,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "PlayerController")
 	TSubclassOf<AMyPlayerController> SecondPlayerControllerClass;
 
+	IGameCommand* Command;	
 
 };
 

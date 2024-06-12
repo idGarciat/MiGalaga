@@ -8,6 +8,9 @@
 #include "InventoryComponent.h"
 #include "MyPlayerController.h"
 #include "ActorSpawnerComponent.h"
+
+#include "Command/GameCommand.h"
+
 #include "GalagaPawn.generated.h"
 
 
@@ -154,5 +157,19 @@ protected:
 	bool Rebote;
 
 	void ReboteProyectil();
+
+
+	//Command Pattern
+
+	IGameCommand* Command;
+
+	class ANaveCommand* NaveCommand;
+	class AControlCommand* ControlCommand;
+	class AComenzarAtaqueCommand* ComenzarAtaqueCommand;
+	class ADetenerAtaqueCommand* DetenerAtaqueCommand;
+
+	void EjecutarComando();
+
+	//
 };
 

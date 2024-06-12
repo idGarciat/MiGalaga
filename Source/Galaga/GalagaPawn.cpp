@@ -26,6 +26,11 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
+#include "Command/ComenzarAtaqueCommand.h"
+#include "Command/DetenerAtaqueCommand.h"
+#include "Command/NaveCommand.h"
+#include "Command/ControlCommand.h"
+
 
 
 
@@ -120,7 +125,7 @@ void AGalagaPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction("Teleportation", IE_Pressed, this, &AGalagaPawn::Teletransporte);
 
-
+	PlayerInputComponent->BindAction("AccionCommand", IE_Pressed, this, &AGalagaPawn::EjecutarComando);
 
 }
 
@@ -255,7 +260,17 @@ void AGalagaPawn::BeginPlay()
 	//	mouse->bEnableMouseOverEvents = true;
 	//}
 
+	NaveCommand = GetWorld()->SpawnActor<ANaveCommand>(ANaveCommand::StaticClass(), FVector(-1030, 980, 215), FRotator::ZeroRotator);
 
+	ControlCommand = GetWorld()->SpawnActor<AControlCommand>(AControlCommand::StaticClass());
+
+	ComenzarAtaqueCommand = GetWorld()->SpawnActor<AComenzarAtaqueCommand>(AComenzarAtaqueCommand::StaticClass());
+
+	ComenzarAtaqueCommand->ComenzarAtaqueCommand(NaveCommand);
+
+	DetenerAtaqueCommand = GetWorld()->SpawnActor<ADetenerAtaqueCommand>(ADetenerAtaqueCommand::StaticClass());
+
+	DetenerAtaqueCommand->DetenerAtaqueCommand(NaveCommand);
 
 
 }
@@ -479,9 +494,7 @@ void AGalagaPawn::Salto()
 
 void AGalagaPawn::Volver(float DeltaSeconds)
 {
-
 	SetActorLocation(FMath::VInterpTo(GetActorLocation(), PosicionInicial, DeltaSeconds, 5));
-
 
 }
 
@@ -521,5 +534,14 @@ void AGalagaPawn::Teletransporte()
 void AGalagaPawn::ReboteProyectil()
 {
 	Rebote = false;
+}
+
+void AGalagaPawn::EjecutarComando()
+{
+
+	ControlCommand->DefinirCommand(ComenzarAtaqueCommand);
+
+	ControlCommand->EjecutarCommand();
+
 }
 

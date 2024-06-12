@@ -22,10 +22,16 @@
 #include "Decorator/Decorator_Main.h"
 #include "MapSceneCapture2D.h"
 
+#include "Command/ComenzarAtaqueCommand.h"
+#include "Command/DetenerAtaqueCommand.h"
+#include "Command/NaveCommand.h"
+#include "Command/ControlCommand.h"
+
 AGalagaGameMode::AGalagaGameMode()
 {
-	// set default pawn class to our character class
+	PrimaryActorTick.bCanEverTick = true;
 
+	// set default pawn class to our character class
 	PlayerControllerClass = AMyPlayerController::StaticClass();
 
 	DefaultPawnClass = AGalagaPawn::StaticClass();
@@ -78,7 +84,6 @@ void AGalagaGameMode::BeginPlay()
 	//}
 	}
 	
-
 	//Problema con el controlador de jugador
 	{
 
@@ -131,49 +136,52 @@ void AGalagaGameMode::BeginPlay()
 		//}
 	}
 
-
-	FVector UbicacionNaveEnemiga01 = FVector(0,-400,215);
-	FVector UbicacionMiniNaveEnemigaCaza01 = FVector(100,-400,215);
-	FVector UbicacionMiniNaveEnemigaCaza02 = FVector(100,-700,215);
-	FVector UbicacionMiniNaveEnemigaEspia01 = FVector(100,-900,215);
-	FVector UbicacionMiniNaveEnemigaEspia02 = FVector(100,-1100,215);
-	FVector UbicacionMiniNaveEnemigaNodriza01 = FVector(100,-1300,215);
-	FVector UbicacionMiniNaveEnemigaNodriza02 = FVector(100,-1500,215);
-
-
-	//Spawn NaveEnemiga
-	NaveEnemiga01=GetWorld()->SpawnActor<ANaveEnemiga>(UbicacionNaveEnemiga01, FRotator::ZeroRotator);
-	MiniNaveEnemigaCaza01=GetWorld()->SpawnActor<AMiniNaveEnemigaCaza01>(UbicacionMiniNaveEnemigaCaza01, FRotator::ZeroRotator);
-	MiniNaveEnemigaCaza02=GetWorld()->SpawnActor<AMiniNaveEnemigaCaza02>(UbicacionMiniNaveEnemigaCaza02, FRotator::ZeroRotator);
-	MiniNaveEnemigaEspia01=GetWorld()->SpawnActor<AMiniNaveEnemigaEspia01>(UbicacionMiniNaveEnemigaEspia01, FRotator::ZeroRotator);
-	MiniNaveEnemigaEspia02=GetWorld()->SpawnActor<AMiniNaveEnemigaEspia02>(UbicacionMiniNaveEnemigaEspia02, FRotator::ZeroRotator);
-	MiniNaveEnemigaNodriza01=GetWorld()->SpawnActor<AMiniNaveEnemigaNodriza01>(UbicacionMiniNaveEnemigaNodriza01, FRotator::ZeroRotator);
-	MiniNaveEnemigaNodriza02=GetWorld()->SpawnActor<AMiniNaveEnemigaNodriza02>(UbicacionMiniNaveEnemigaNodriza02, FRotator::ZeroRotator);
+	//Spawn de naves
+	{
+		FVector UbicacionNaveEnemiga01 = FVector(0, -400, 215);
+		FVector UbicacionMiniNaveEnemigaCaza01 = FVector(100, -400, 215);
+		FVector UbicacionMiniNaveEnemigaCaza02 = FVector(100, -700, 215);
+		FVector UbicacionMiniNaveEnemigaEspia01 = FVector(100, -900, 215);
+		FVector UbicacionMiniNaveEnemigaEspia02 = FVector(100, -1100, 215);
+		FVector UbicacionMiniNaveEnemigaNodriza01 = FVector(100, -1300, 215);
+		FVector UbicacionMiniNaveEnemigaNodriza02 = FVector(100, -1500, 215);
 
 
-	//Spawn InventoryActor
-	//InventoryActor=GetWorld()->SpawnActor<AInventoryActor>(FVector(0,0, 214), FRotator::ZeroRotator);
-	//Spawn CapsulaVelocidad
-	CapsulaVelocidad=GetWorld()->SpawnActor<ACapsulaVelocidad>(FVector(0,100, 214), FRotator::ZeroRotator);
-	//Spawn CapsulaDisparo
-	CapsulaDisparo=GetWorld()->SpawnActor<ACapsulaDisparo>(FVector(0,200, 214), FRotator::ZeroRotator);
+		//Spawn NaveEnemiga
+		NaveEnemiga01 = GetWorld()->SpawnActor<ANaveEnemiga>(UbicacionNaveEnemiga01, FRotator::ZeroRotator);
+		MiniNaveEnemigaCaza01 = GetWorld()->SpawnActor<AMiniNaveEnemigaCaza01>(UbicacionMiniNaveEnemigaCaza01, FRotator::ZeroRotator);
+		MiniNaveEnemigaCaza02 = GetWorld()->SpawnActor<AMiniNaveEnemigaCaza02>(UbicacionMiniNaveEnemigaCaza02, FRotator::ZeroRotator);
+		MiniNaveEnemigaEspia01 = GetWorld()->SpawnActor<AMiniNaveEnemigaEspia01>(UbicacionMiniNaveEnemigaEspia01, FRotator::ZeroRotator);
+		MiniNaveEnemigaEspia02 = GetWorld()->SpawnActor<AMiniNaveEnemigaEspia02>(UbicacionMiniNaveEnemigaEspia02, FRotator::ZeroRotator);
+		MiniNaveEnemigaNodriza01 = GetWorld()->SpawnActor<AMiniNaveEnemigaNodriza01>(UbicacionMiniNaveEnemigaNodriza01, FRotator::ZeroRotator);
+		MiniNaveEnemigaNodriza02 = GetWorld()->SpawnActor<AMiniNaveEnemigaNodriza02>(UbicacionMiniNaveEnemigaNodriza02, FRotator::ZeroRotator);
 
-	//Spawn MiniNaveEnemigaLoca01
-	FVector UbicacionMiniNaveEnemigaLoca01 = FVector(700,-400,215);
-	MiniNaveEnemigaLoca01=GetWorld()->SpawnActor<AMiniNaveEnemigaLoca01>(UbicacionMiniNaveEnemigaLoca01, FRotator::ZeroRotator);
 
-	//Spawn MiniNaveEnemigaLoca02
-	FVector UbicacionMiniNaveEnemigaLoca02 = FVector(800,-400,215);
-	MiniNaveEnemigaLoca02=GetWorld()->SpawnActor<AMiniNaveEnemigaLoca02>(UbicacionMiniNaveEnemigaLoca02, FRotator::ZeroRotator);
+		//Spawn InventoryActor
+		//InventoryActor=GetWorld()->SpawnActor<AInventoryActor>(FVector(0,0, 214), FRotator::ZeroRotator);
+		//Spawn CapsulaVelocidad
+		CapsulaVelocidad = GetWorld()->SpawnActor<ACapsulaVelocidad>(FVector(0, 100, 214), FRotator::ZeroRotator);
+		//Spawn CapsulaDisparo
+		CapsulaDisparo = GetWorld()->SpawnActor<ACapsulaDisparo>(FVector(0, 200, 214), FRotator::ZeroRotator);
 
-	FVector UbicacionMiniNaveEnemigaLoca03 = FVector(900, -400, 215);
-	MiniNaveEnemigaLoca03 = GetWorld()->SpawnActor<AMiniNaveEnemigaLoca03>(UbicacionMiniNaveEnemigaLoca03, FRotator::ZeroRotator);
+		//Spawn MiniNaveEnemigaLoca01
+		FVector UbicacionMiniNaveEnemigaLoca01 = FVector(700, -400, 215);
+		MiniNaveEnemigaLoca01 = GetWorld()->SpawnActor<AMiniNaveEnemigaLoca01>(UbicacionMiniNaveEnemigaLoca01, FRotator::ZeroRotator);
 
-	FVector UbicacionHierarchyActor = FVector(1000, -400, 215);
-	HierarchyActor = GetWorld()->SpawnActor<AHierarchyActor>(UbicacionHierarchyActor, FRotator::ZeroRotator);
+		//Spawn MiniNaveEnemigaLoca02
+		FVector UbicacionMiniNaveEnemigaLoca02 = FVector(800, -400, 215);
+		MiniNaveEnemigaLoca02 = GetWorld()->SpawnActor<AMiniNaveEnemigaLoca02>(UbicacionMiniNaveEnemigaLoca02, FRotator::ZeroRotator);
+
+		FVector UbicacionMiniNaveEnemigaLoca03 = FVector(900, -400, 215);
+		MiniNaveEnemigaLoca03 = GetWorld()->SpawnActor<AMiniNaveEnemigaLoca03>(UbicacionMiniNaveEnemigaLoca03, FRotator::ZeroRotator);
+
+		FVector UbicacionHierarchyActor = FVector(1000, -400, 215);
+		HierarchyActor = GetWorld()->SpawnActor<AHierarchyActor>(UbicacionHierarchyActor, FRotator::ZeroRotator);
+
+
+	}
 
 	AMapSceneCapture2D* MapSceneCapture2D = GetWorld()->SpawnActor<AMapSceneCapture2D>(AMapSceneCapture2D::StaticClass());
-
 
 	//Spawn FactoryMethod_Main
 	//AFactoryMethod_Main* FactoryMethod_Main = GetWorld()->SpawnActor<AFactoryMethod_Main>(AFactoryMethod_Main::StaticClass());
@@ -186,7 +194,30 @@ void AGalagaGameMode::BeginPlay()
 
 
 	//Timer
-	//GetWorldTimerManager().SetTimer(TimerHandle, this, &AGalagaGameMode::Reinicio, 10.0f, false, 10.0f);
+	//GetWorldTimerManager().SetTimer(TimerHandle, this, &AGalagaGameMode::Reinicio, 10.0f, true, 10.0f);
+
+	//ANaveCommand* NaveCommand = GetWorld()->SpawnActor<ANaveCommand>(ANaveCommand::StaticClass(), FVector(-1030, 980, 215),FRotator::ZeroRotator);
+
+	//AControlCommand* ControlCommand = GetWorld()->SpawnActor<AControlCommand>(AControlCommand::StaticClass());
+	//
+
+
+	//AComenzarAtaqueCommand* ComenzarAtaqueCommand = GetWorld()->SpawnActor<AComenzarAtaqueCommand>(AComenzarAtaqueCommand::StaticClass());
+	//
+	//ComenzarAtaqueCommand->ComenzarAtaqueCommand(NaveCommand);
+
+	//ControlCommand->DefinirCommand(ComenzarAtaqueCommand);
+
+	//ControlCommand->EjecutarCommand();
+
+
+
+}
+
+void AGalagaGameMode::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
 
 }
 
@@ -194,18 +225,25 @@ void AGalagaGameMode::BeginPlay()
 void AGalagaGameMode::Reinicio()
 {
 	//Obtiene el pawn actual
+
+
+
 	AGalagaPawn* JugadorEnMundoP = Cast<AGalagaPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	//JugadorEnMundoP->Destroy();
+	if (JugadorEnMundoP) {
+		JugadorEnMundoP->Destroy();
 
+	}
 
-	//AGalagaPawn* JugadorEnMundo = GetWorld()->SpawnActor<AGalagaPawn>(AGalagaPawn::StaticClass(), FVector(-1050,10,215), FRotator::ZeroRotator);
-	//AMyPlayerController* JugadorController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	//
-	//JugadorController->Possess(JugadorEnMundo);
+	AGalagaPawn* JugadorEnMundo = GetWorld()->SpawnActor<AGalagaPawn>(AGalagaPawn::StaticClass(), FVector(-1050,10,215), FRotator::ZeroRotator);
+	
+	AMyPlayerController* JugadorController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	
+	JugadorController->Possess(JugadorEnMundo);
 
-	//JugadorEnMundo->AutoPossessPlayer = EAutoReceiveInput::Player0;
-
+	JugadorEnMundo->AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 
 }
+
+
 
