@@ -21,9 +21,10 @@ ANaveCommand::ANaveCommand()
 	Mesh->SetStaticMesh(MeshAsset.Object);
 	
 
-	//AttackCommand = CreateDefaultSubobject<UAttackCommand>(TEXT("AttackCommand"));
-	//MoveCommand = CreateDefaultSubobject<UMoveCommand>(TEXT("MoveCommand"));
+	AttackCommand = CreateDefaultSubobject<UAttackCommand>(TEXT("AttackCommand"));
+	MoveCommand = CreateDefaultSubobject<UMoveCommand>(TEXT("MoveCommand"));
 
+	
 
 	i = 1;
 	FireDirection = FVector(1, 0, 0);
@@ -34,6 +35,8 @@ void ANaveCommand::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	AttackCommand->AttackCommand(this);
+	MoveCommand->MoveCommand(this);
 }
 
 // Called every frame
@@ -67,6 +70,7 @@ void ANaveCommand::Move()
 void ANaveCommand::Attack()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, TEXT("AttackAndo"));
+	GetWorld()->SpawnActor<AMiniNaveEnemigaNodriza02>(AMiniNaveEnemigaNodriza02::StaticClass(), GetActorLocation() + 200, FRotator::ZeroRotator);
 
 }
 

@@ -196,19 +196,25 @@ void AGalagaGameMode::BeginPlay()
 	//Timer
 	//GetWorldTimerManager().SetTimer(TimerHandle, this, &AGalagaGameMode::Reinicio, 10.0f, true, 10.0f);
 
-	//ANaveCommand* NaveCommand = GetWorld()->SpawnActor<ANaveCommand>(ANaveCommand::StaticClass(), FVector(-1030, 980, 215),FRotator::ZeroRotator);
-
-	//AControlCommand* ControlCommand = GetWorld()->SpawnActor<AControlCommand>(AControlCommand::StaticClass());
-	//
 
 
-	//AComenzarAtaqueCommand* ComenzarAtaqueCommand = GetWorld()->SpawnActor<AComenzarAtaqueCommand>(AComenzarAtaqueCommand::StaticClass());
-	//
+	ANaveCommand* NaveCommand = GetWorld()->SpawnActor<ANaveCommand>(ANaveCommand::StaticClass(), FVector(-1030, 980, 215),FRotator::ZeroRotator);
+
+	AControlCommand* ControlCommand = GetWorld()->SpawnActor<AControlCommand>(AControlCommand::StaticClass());
+	
+
+
+	AComenzarAtaqueCommand* ComenzarAtaqueCommand = GetWorld()->SpawnActor<AComenzarAtaqueCommand>(AComenzarAtaqueCommand::StaticClass());
+	
 	//ComenzarAtaqueCommand->ComenzarAtaqueCommand(NaveCommand);
 
 	//ControlCommand->DefinirCommand(ComenzarAtaqueCommand);
 
 	//ControlCommand->EjecutarCommand();
+
+	ControlCommand->DefinirCommand(NaveCommand->GetAttackCommand());
+
+	NaveCommand->GetAttackCommand()->Execute();
 
 
 
